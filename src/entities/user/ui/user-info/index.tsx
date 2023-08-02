@@ -6,15 +6,17 @@ import { VolunteerInfo } from './volunteer-info';
 import { UnauthorizedUser } from './unauthorized-user';
 
 import styles from './styles.module.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { updateUserInfo, uploadUserAvatar } from 'entities/user/model';
 import type { UpdateUserInfo } from 'entities/user/types';
-import { LightPopup } from 'shared/ui/light-popup';
+import { EditViewerInfo } from 'features/edit-viewer-info/ui';
 
 export const UserInfo = () => {
   const user = useAppSelector((state) => state.user.data);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const dispatch = useAppDispatch();
+
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const handleOpenSettingClick = () => {
     setIsPopupOpen(true);
@@ -49,8 +51,9 @@ export const UserInfo = () => {
       name={user.fullname}
       avatar={user.avatar}
       onClickSettingsButton={handleOpenSettingClick}
+      buttonRef={buttonRef}
     >
-      <LightPopup
+      <EditViewerInfo
         avatarLink={user.avatar}
         avatarName={user.avatar}
         onClickSave={handleSaveViewerSettings}
@@ -60,6 +63,7 @@ export const UserInfo = () => {
         valueAddress={user.address}
         isPopupOpen={isPopupOpen}
         valueId={user.id}
+        buttonRef={buttonRef}
       />
 
       <div className={styles.contentWrapper}>
