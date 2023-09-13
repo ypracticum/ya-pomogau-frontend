@@ -1,14 +1,13 @@
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-
-import { api } from '../../../shared/api';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { UserInfo, UserRole } from '../types';
 
 type UserState = {
+  id?: number;
   role: UserRole | null;
   data: UserInfo | null;
   isLoading: boolean;
   isFailed: boolean;
-  error?: string;
+  error?: string | null | undefined;
 };
 
 const initialState: UserState = {
@@ -16,40 +15,40 @@ const initialState: UserState = {
   data: null,
   isLoading: false,
   isFailed: false,
+  error: null,
 };
-
-export const fetchUserDataByRole = createAsyncThunk(
-  'user/fetchData',
-  async (role: UserRole) => {
-    const response = await api.getAllUsers();
-    return response.filter((user) => user.role === role)[0];
-  }
-);
 
 export const userModel = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setUserRole: (state, { payload }: PayloadAction<UserRole>) => {
+    setUserRole: (state, { payload }: PayloadAction<UserRole | null>) => {
       state.role = payload;
     },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchUserDataByRole.pending, (state) => {
-        state.isLoading = true;
-        state.isFailed = false;
-      })
-      .addCase(fetchUserDataByRole.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.data = action.payload;
-      })
-      .addCase(fetchUserDataByRole.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isFailed = true;
-        state.error = action.error.message;
-      });
+    logoutUser: (state) => {
+      state.data = null;
+      state.role = null;
+    },
+    setUser: (state, { payload }) => {
+      state.data = payload;
+    },
+    enableBlokedError: (state) => {
+      state.error = 'Пользователь заблокирован';
+    },
+    enableConnectionError: (state) => {
+      state.error = 'Ошибка подключения';
+    },
+    enableAnyError: (state) => {
+      state.error = 'Любой текст ошибки';
+    },
   },
 });
 
-export const { setUserRole } = userModel.actions;
+export const {
+  setUserRole,
+  logoutUser,
+  setUser,
+  enableBlokedError,
+  enableConnectionError,
+  enableAnyError,
+} = userModel.actions;

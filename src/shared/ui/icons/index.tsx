@@ -1,6 +1,5 @@
 import { FC, useMemo } from 'react';
 import type { IIconProps } from './utils';
-
 import { CalendarIcon } from './calendar-icon';
 import { ClockIcon } from './clock-icon';
 import { ReadMessageIcon } from './read-message-icon';
@@ -18,6 +17,7 @@ import { PinIcon } from './pin-icon';
 import { SendIcon } from './send-icon';
 import { EditIcon } from './edit-icon';
 import { CloseIcon } from './close-icon';
+import { CloseCrossIcon } from './close-cross-icon';
 import { VkIcon } from './vk-icon';
 import { DoneIcon } from './done-icon';
 import { ActiveApplicationIcon } from './active-application-icon';
@@ -33,10 +33,21 @@ import { MapApplicationIcon } from './map-application-icon';
 import { MapIcon } from './map-icon';
 import { PopularIcon } from './popular-icon';
 import { CompletedApplicationIcon } from './completed-application-icon';
-import { ProgressIcon } from './progress-icon';
 import { CreateApplication } from './create-application-icon';
+import { LoginIcon } from './login-icon';
+import { PasswordOpenIcon } from './password-open-icon';
+import { PasswordCloseIcon } from './password-close-icon';
+import { CheckIcon } from './check-icon';
+import { ArrowDownIcon } from './arrow-down-icon';
+
+import { ExclamationPointIcon } from './exclamation-point-icon';
+import { ExclamationPMark } from './excalamation-mark';
+
+import { ConflictIcon } from './conflict-icon';
 
 const icons = {
+  ExclamationPMark,
+  ExclamationPointIcon,
   CalendarIcon,
   ClockIcon,
   ReadMessageIcon,
@@ -54,6 +65,7 @@ const icons = {
   SendIcon,
   EditIcon,
   CloseIcon,
+  CloseCrossIcon,
   VkIcon,
   DoneIcon,
   ActiveApplicationIcon,
@@ -69,8 +81,13 @@ const icons = {
   MapApplicationIcon,
   MapIcon,
   PopularIcon,
-  ProgressIcon,
   CreateApplication,
+  LoginIcon,
+  PasswordOpenIcon,
+  PasswordCloseIcon,
+  CheckIcon,
+  ArrowDownIcon,
+  ConflictIcon,
 };
 
 type TIcons = Record<keyof typeof icons, FC<IIconProps>>;

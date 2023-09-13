@@ -1,24 +1,30 @@
+// !!!
+
+// НЕ ИСПОЛЬЗОВАТЬ СТРАНИЦУ В РОУТИНГЕ
+// СТРАНИЦА НУЖНА ЧТОБЫ ПЕРЕДЕЛАТЬ КОМПОНЕНТЫ (TaskList, Filter) НА СТРАНИЦЕ profile/active и profile/completed С УЧЕТОМ РОЛЕЙ
+
+// !!!
+
 import { useState, MouseEvent, useRef, useEffect } from 'react';
 import { NavLink, Navigate, Route, Routes } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { useMediaQuery } from 'shared/hooks';
 
-import { UserInfo } from 'entities/user';
 import { setUserRole } from 'entities/user/model';
 import { ContentLayout } from 'shared/ui/content-layout';
-import { PageLayout } from 'shared/ui/page-layout';
 import { SmartHeader } from 'shared/ui/smart-header';
 import { Icon } from 'shared/ui/icons';
 import { TaskList } from 'entities/task/ui/task-list';
-import { ButtonContainer } from 'shared/ui/button-container';
+import { SideMenuContainer } from 'entities/side-menu-container';
 import { CardButton } from 'shared/ui/card-button';
-import { Filter } from 'features/filter/ui';
+
 import { Request } from 'features/create-request';
 import { openPopup } from 'features/create-request/model';
 import { NotFoundPage } from 'pages/not-found';
 
 import styles from './styles.module.css';
+import useUser from 'shared/hooks/use-user';
 
 export function RecipientPage() {
   const isMobile = useMediaQuery('(max-width:1150px)');
@@ -26,7 +32,7 @@ export function RecipientPage() {
 
   const dispatch = useAppDispatch();
 
-  const isAuth = !!useAppSelector((store) => store.user.role);
+  const isAuth = useUser();
   const [isFilterVisibel, setIsFilterVisibel] = useState(false);
   const buttonFilterRef = useRef<Element>();
   // данные о позиции кнопки вызова фильтра, на основе которых определяется позиция фильтра
@@ -53,15 +59,18 @@ export function RecipientPage() {
       window.removeEventListener('resize', getButtonPosition);
     };
   }, [dispatch]);
-
+  //ниже закомментирован код, который более не используется.
+  //Компонент PageLayout больше не использует пропсы side и extraClass
   return (
-    <PageLayout
+    <>
+      {/* <PageLayout
       side={
         <>
           <div className={styles.user}>
             <UserInfo />
           </div>
-          <ButtonContainer auth={isAuth}>
+
+          <SideMenuContainer overlayVisible={isAuth}>
             <NavLink to="active" className="link">
               {({ isActive }) => (
                 <CardButton
@@ -92,105 +101,103 @@ export function RecipientPage() {
                 />
               )}
             </NavLink>
-          </ButtonContainer>
+          </SideMenuContainer>
         </>
       }
-      content={
-        <Routes>
-          <Route index element={<Navigate to="active" replace />} />
-          <Route
-            path="active"
-            element={
-              <ContentLayout
-                heading={
-                  <>
-                    <SmartHeader
-                      filterIcon={
-                        <Icon color="blue" icon="FilterIcon" size="54" />
-                      }
-                      filterText="Фильтр"
-                      onClick={openFilter}
-                      settingIcon={
-                        <Icon
-                          color="blue"
-                          icon="ActiveApplicationIcon"
-                          size="54"
-                        />
-                      }
-                      settingText="Активные заявки"
-                    />
-                    {isFilterVisibel && (
+      content={ */}
+      <Routes>
+        <Route index element={<Navigate to="active" replace />} />
+        <Route
+          path="active"
+          element={
+            <ContentLayout
+              heading={
+                <>
+                  <SmartHeader
+                    // filterIcon={
+                    //   <Icon color="blue" icon="FilterIcon" size="54" />
+                    // }
+                    // filterText="Фильтр"
+                    // onClick={openFilter}
+                    icon={
+                      <Icon
+                        color="blue"
+                        icon="ActiveApplicationIcon"
+                        size="54"
+                      />
+                    }
+                    text="Активные заявки"
+                  />
+                  {/* {isFilterVisibel && (
                       <Filter
                         userRole="recipient"
                         changeVisible={() => setIsFilterVisibel(false)}
                         position={buttonPosition}
                       />
-                    )}
-                  </>
+                    )} */}
+                </>
+              }
+            >
+              <TaskList
+                userRole="recipient"
+                isMobile={isMobile}
+                handleClickCloseButton={() => 2}
+                handleClickConfirmButton={() => 3}
+                handleClickMessageButton={() => 5}
+                handleClickPnoneButton={() => 6}
+                handleClickAddTaskButton={() => dispatch(openPopup())}
+                isStatusActive
+                tasks={[]}
+                isLoading={false}
+              />
+              {isPopupOpen && <Request isMobile={isMobileForPopup} />}
+            </ContentLayout>
+          }
+        />
+        <Route
+          path="completed"
+          element={
+            <>
+              <SmartHeader
+                // filterIcon={
+                //   <Icon color="blue" icon="FilterIcon" size="54" />
+                // }
+                // filterText="Фильтр"
+                // onClick={openFilter}
+                icon={
+                  <Icon
+                    color="blue"
+                    icon="CompletedApplicationIcon"
+                    size="54"
+                  />
                 }
-              >
-                <TaskList
-                  userRole="recipient"
-                  isMobile={isMobile}
-                  handleClickCloseButton={() => 2}
-                  handleClickConfirmButton={() => 3}
-                  handleClickMessageButton={() => 5}
-                  handleClickPnoneButton={() => 6}
-                  handleClickAddTaskButton={() => dispatch(openPopup())}
-                  isStatusActive
-                  tasks={[]}
-                />
-                {isPopupOpen && <Request isMobile={isMobileForPopup} />}
-              </ContentLayout>
-            }
-          />
-          <Route
-            path="completed"
-            element={
-              <ContentLayout
-                heading={
-                  <>
-                    <SmartHeader
-                      filterIcon={
-                        <Icon color="blue" icon="FilterIcon" size="54" />
-                      }
-                      filterText="Фильтр"
-                      onClick={openFilter}
-                      settingIcon={
-                        <Icon
-                          color="blue"
-                          icon="CompletedApplicationIcon"
-                          size="54"
-                        />
-                      }
-                      settingText="Завершенные заявки"
-                    />
-                    {isFilterVisibel && (
+                text="Завершенные заявки"
+              />
+              {/* {isFilterVisibel && (
                       <Filter
                         userRole="recipient"
                         changeVisible={() => setIsFilterVisibel(false)}
                         position={buttonPosition}
                       />
-                    )}
-                  </>
-                }
-              >
-                <TaskList
-                  userRole="recipient"
-                  isMobile={isMobile}
-                  handleClickCloseButton={() => 2}
-                  handleClickConfirmButton={() => 3}
-                  handleClickMessageButton={() => 5}
-                  handleClickPnoneButton={() => 6}
-                  isStatusActive={false}
-                  tasks={[]}
-                />
-              </ContentLayout>
-            }
-          />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      }
-    />
+                    )} */}
+              <TaskList
+                userRole="recipient"
+                isMobile={isMobile}
+                handleClickCloseButton={() => 2}
+                handleClickConfirmButton={() => 3}
+                handleClickMessageButton={() => 5}
+                handleClickPnoneButton={() => 6}
+                isStatusActive={false}
+                tasks={[]}
+                isLoading={false}
+              />
+            </>
+          }
+        />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+      {/*  }
+     />*/}
+    </>
   );
 }

@@ -1,28 +1,30 @@
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
 import { YMaps } from '@pbe/react-yandex-maps';
 
+import { AppRoutes } from 'app/routing';
 import { YMAPS_API_KEY } from 'config/ymaps';
 import { store } from './store';
-import { AppRoutes } from '../pages';
 
 import './assets/styles/index.css';
+import ErrorBoundary from 'features/error-boundary';
 
 function App() {
   return (
-    <BrowserRouter>
+    <>
       <Provider store={store}>
-        <YMaps
-          enterprise
-          query={{
-            load: 'Map,Placemark,map.addon.balloon,geoObject.addon.balloon',
-            apikey: YMAPS_API_KEY,
-          }}
-        >
-          <AppRoutes />
-        </YMaps>
+        <ErrorBoundary>
+          <YMaps
+            enterprise
+            query={{
+              load: 'Map,Placemark,map.addon.balloon,geoObject.addon.balloon',
+              apikey: YMAPS_API_KEY,
+            }}
+          >
+            <AppRoutes />
+          </YMaps>
+        </ErrorBoundary>
       </Provider>
-    </BrowserRouter>
+    </>
   );
 }
 

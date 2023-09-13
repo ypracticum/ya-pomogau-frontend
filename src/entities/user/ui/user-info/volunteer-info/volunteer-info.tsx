@@ -7,22 +7,29 @@ import styles from '../styles.module.css';
 
 interface VolunteerInfoProps {
   score: number;
-  hasKey?: boolean;
+  hasKey?: number | null;
+  extClassName?: string;
 }
 
-export const VolunteerInfo = ({ score, hasKey }: VolunteerInfoProps) => (
-  <div className={styles.volunteerInfo}>
+export const VolunteerInfo = ({
+  score,
+  hasKey,
+  extClassName,
+}: VolunteerInfoProps) => (
+  <div className={classnames(extClassName, styles.volunteerInfo)}>
     <div className={styles.dataWrapper}>
       <BallsIcon size="32" color="blue" />
       <span className={classnames('text', 'text_size_small', styles.count)}>
         {score}
       </span>
     </div>
-    <div className={styles.dataWrapper}>
-      <KeyIcon size="24" color="blue" />
-      <span className={classnames('text', 'text_size_small', styles.count)}>
-        {hasKey ? '1' : '0'}
-      </span>
-    </div>
+    {hasKey && (
+      <div className={styles.dataWrapper}>
+        <KeyIcon size="24" color="blue" />
+        <span className={classnames('text', 'text_size_small', styles.count)}>
+          {hasKey}
+        </span>
+      </div>
+    )}
   </div>
 );

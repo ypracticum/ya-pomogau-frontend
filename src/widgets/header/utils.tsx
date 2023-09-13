@@ -3,6 +3,7 @@ import { PersonIcon } from 'shared/ui/icons/person-icon';
 import { LockIcon } from 'shared/ui/icons/lock-icon';
 import { LocationIcon } from 'shared/ui/icons/location-icon';
 import { ExitIcon } from 'shared/ui/icons/exit-icon';
+
 import type {
   ISideBarPosition,
   ISideBarElementProps,
@@ -29,6 +30,7 @@ export const positionConfigMenu: ISideBarPosition = {
     textAlign: 'right',
   },
 };
+
 export const linksTop: ISideBarElementProps[] = [
   {
     title: 'Личный кабинет',
@@ -51,16 +53,17 @@ export const linksTop: ISideBarElementProps[] = [
     icon: <LocationIcon color="blue" />,
   },
 ];
-export const linksMenuMobile: ISideBarElementProps[] = [
-  {
-    title: 'Блог',
-    to: '/blog',
-    icon: <WriteMessageIcon color="blue" />,
-  },
+
+export const linksMenuMobileUnauthorized: ISideBarElementProps[] = [
   {
     title: 'Личный кабинет',
     to: '/profile',
     icon: <PersonIcon color="blue" />,
+  },
+  {
+    title: 'Блог',
+    to: '/blog',
+    icon: <WriteMessageIcon color="blue" />,
   },
   {
     title: 'Политика конфеденциальности',
@@ -72,12 +75,17 @@ export const linksMenuMobile: ISideBarElementProps[] = [
     to: '/contacts',
     icon: <LocationIcon color="blue" />,
   },
+];
+
+export const linksMenuMobile: ISideBarElementProps[] = [
+  ...linksMenuMobileUnauthorized,
   {
     title: 'Выход',
     to: '/out',
     icon: <ExitIcon color="blue" />,
   },
 ];
+
 export const linksMenu = [
   {
     title: 'Выход',
