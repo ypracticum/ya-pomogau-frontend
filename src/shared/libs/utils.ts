@@ -1,3 +1,4 @@
+import { FRONT_URL } from 'config/api-config';
 import differenceInMilliseconds from 'date-fns/differenceInMilliseconds';
 
 export const isTaskUrgent = (date: string): boolean =>
@@ -23,7 +24,7 @@ export const isEmptyObj = (obj: object): boolean => {
   return true;
 };
 //callback link для возращения после авторизации
-export const cbLink = `${process.env.REACT_APP_FRONT}/vk-auth`;
+export const cbLink = `${FRONT_URL}/vk-auth`;
 
 //функция редиректа на VK
 export const handleRedirectVK = () => {
